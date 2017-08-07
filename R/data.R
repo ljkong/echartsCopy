@@ -1,64 +1,48 @@
-# split the data matrix for a scatterplot by series
-data_scatter = function(x, y, series = NULL, type = 'scatter') {
-  xy = unname(cbind(x, y))
-  if (is.null(series)) return(list(list(type = type, data = xy)))
-  xy = split(as.data.frame(xy), series)
-  nms = names(xy)
-  obj = list()
-  for (i in seq_along(xy)) {
-    obj[[i]] = list(name = nms[i], type = type, data = unname(as.matrix(xy[[i]])))
-  }
-  obj
-}
+#' mapInfoDf use for china map name reference.
+#'
+#' This dataset comes from geo infomation.
+#'
+#' @section Variables:
+#' \describe{
+#'   \item{state}{State where seizure occured.}
+#'   \item{potency}{Purity of cocaine, as percentage (100\% = pure cocaine,
+#'     0\% = all filler)}
+#'   \item{weight}{Weight, in grams.}
+#'   \item{month}{Month in which seizure occured.}
+#'   \item{price}{Estimated value in USD.}
+#' }
+#' @section Use:
+#' Use of this data requires your agreement to refer to your analyses as
+#' "unvalidated DEA data and to claim authorship and responsibility for any
+#' inferences and/or conclusions you may draw from this information."
+#' @format Data frame with 3380 observations of 5 variables.
+#' @source
+#' \url{http://www.justice.gov/dea/resource-center/stride-data.shtml}
+"mapInfoDf"
 
-data_bar = function(x, y, series = NULL, type = 'bar') {
+#' mapTestData_chs use for eMap chart generation.
+#'
+#' This dataset comes from geo infomation.
+#' @format Data frame with 3380 observations of 5 variables.
+#' @source
+#' \url{http://www.justice.gov/dea/resource-center/stride-data.shtml}
+"mapTestData_chs"
 
-  # plot the frequencies of x when y is not provided
-  if (is.null(y)) {
+#' parallelDf use for eParallel chart generation.
+#'
+#' This dataset comes from  infomation.
+#' @format Data frame with 1140 observations of 6 variables.
+"parallelDf"
 
-    if (is.null(series)) {
-      y = table(x)
-      return(list(list(type = type, data = unname(c(y)))))
-    }
+#' wordFreqDf for eWordcloud chart generation.
+#'
+#' This dataset comes from ECharts original data.
+#' @format Data frame with 337 observations of 2 variables.
+"wordFreqDf"
 
-    y = table(x, series)
-    nms = colnames(y)
-    obj = list()
-    for (i in seq_len(ncol(y))) {
-      obj[[i]] = list(name = nms[i], type = type, data = unname(y[, i]))
-    }
-    return(obj)
-
-  }
-
-  # when y is provided, use y as the height of bars
-  if (is.null(series)) {
-    return(list(list(type = type, data = y)))
-  }
-
-  xy = tapply(y, list(x, series), function(z) {
-    if (length(z) == 1) return(z)
-    stop('y must only have one value corresponding to each combination of x and series')
-  })
-  nms = colnames(xy)
-  obj = list()
-  for (i in seq_len(ncol(xy))) {
-    obj[[i]] = list(name = nms[i], type = type, data = unname(xy[, i]))
-  }
-  obj
-
-}
-
-data_line = function(x, y, series = NULL) {
-  if (is.null(x) && is.ts(y)) {
-    x = as.numeric(time(y))
-    y = as.numeric(y)
-  }
-  if (is.numeric(x)) {
-    return(data_scatter(x, y, series, type = 'line'))
-  }
-  if (is.null(series)) {
-    return(list(list(type = 'line', data = y)))
-  }
-  data_bar(x, y, series, type = 'line')
-}
+#' wordFreqDf_chs for eWordcloud chart generation.
+#'
+#' This dataset comes from published articles of cos.name.
+#' And use the Chinese word segmentation package(jiebaR) to generate the word data.frame.
+#' @format Data frame with 996 observations of 2 variables.
+"wordFreqDf_chs"
