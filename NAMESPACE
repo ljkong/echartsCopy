@@ -2,6 +2,10 @@
 
 S3method("&",echarts)
 S3method("+",echarts)
+S3method(echart,data.frame)
+S3method(echart,default)
+S3method(echart,list)
+export(echart)
 export("%&%")
 export("%+%")
 export(eArea)
